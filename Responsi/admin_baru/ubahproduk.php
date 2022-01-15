@@ -46,7 +46,7 @@
         }else{
             $koneksi->query("UPDATE produk SET 
             nama_produk = '$_POST[nama]', harga_produk = '$_POST[harga]', berat_produk = '$_POST[berat]', 
-            foto_produk = '$namafoto', deskripsi_produk = '$_POST[deskripsi]' WHERE id_produk='$_GET[id]'");
+            deskripsi_produk = '$_POST[deskripsi]' WHERE id_produk='$_GET[id]'");
         }
         echo "<script>alert('Data Produk telah diubah');</script>";
         echo "<script>location='index.php?halaman=produk';</script>";
