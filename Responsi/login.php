@@ -97,6 +97,9 @@
                                 <input type="email" class="form-control" name="email">
                                 <label>Password</label>
                                 <input type="password" class="form-control" name="password">
+                                <label>Captcha : </label>
+                                <img src='captcha.php'/>
+                                <input name='captcha_code' type='text' class="form-control">
                             </div>
                             <button class="btn btn-primary" name="login">Login</button>
                         </form>
@@ -108,22 +111,30 @@
     
 <?php
     if(isset($_POST['login'])){
+        
         $email = $_POST["email"];
         $password = $_POST["password"];
         $ambil = $koneksi -> query("SELECT * FROM pelanggan WHERE email_pelanggan='$email'AND password_pelanggan='$password'");
 
         $akun = $ambil -> num_rows;
-        if($akun==1){
-            $akun = $ambil->fetch_assoc();
-            $_SESSION["pelanggan"] = $akun;
-            echo "<script>alert('Anda Sukses Login')</script>";
-            echo "<script>location='index.php';</script>";
-        }
-        else{
-            echo "<script>alert('Anda Gagal Login')</script>";
-            echo "<script>location='login.php';</script>";
-        }
-    }
+        if ($_POST["captcha_code"] == $_SESSION["captcha_code"]) {
+            if($akun==1){
+                $akun = $ambil->fetch_assoc();
+                $_SESSION["pelanggan"] = $akun;
+                echo "<script>alert('Anda Sukses Login')</script>";
+                echo "<script>location='index.php';</script>";
+            }
+            else{
+                echo "<script>alert('Email atau password bermasalah')</script>";
+                echo "<script>location='login.php';</script>";
+            }
+            mysqli_close($koneksi); 
+        } 
+        else {
+            echo "<script>alert('Captcha kosong atau captcha salah')</script>";
+            echo "<script>location='login.php';</script>"; 
+        } 
+} 
     
 ?>
 </body>

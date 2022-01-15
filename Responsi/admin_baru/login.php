@@ -35,7 +35,7 @@ require 'config.php';
         <div class="row justify-content-center">
 
             <div class="col-xl-10 col-lg-12 col-md-9">
-
+            
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
@@ -57,10 +57,11 @@ require 'config.php';
                                                 id="exampleInputPassword" placeholder="Password" name="pass">
                                         </div>
                                         <div class="form-group">
+                                            <img src='captcha.php'/>
+                                            <input name='captcha_code' type='text' class="form-control form-control-user" placeholder="Captcha">
+                                        </div>
+                                        <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
                                             </div>
                                         </div>
                                         <button class="btn btn-primary btn-user btn-block" name="login">Login</button>
@@ -76,16 +77,23 @@ require 'config.php';
                                     if(isset($_POST['login'])){
                                         $ambil=$koneksi->query("SELECT * FROM admin WHERE username='$_POST[user]' AND password='$_POST[pass]'");
                                         $cocok = $ambil->num_rows;
-                                        if($cocok==1){
-                                            $_SESSION['admin']=$ambil->fetch_assoc();
-                                            echo "&nbsp";
-                                            echo "<div class='alert alert-info'>Login Sukses</div>";
-                                            echo "<meta http-equiv='refresh' content='1;url=index.php''>";
-                                        }else{
-                                            echo "&nbsp";
-                                            echo "<div class='alert alert-danger'>Username atau Password tidak benar</div>";
-                                            echo "<meta http-equiv='refresh' content='1;url=login.php''>";
+                                        if ($_POST["captcha_code"] == $_SESSION["captcha_code"]) {
+                                            if($cocok==1){
+                                                $_SESSION['admin']=$ambil->fetch_assoc();
+                                                echo "&nbsp";
+                                                echo "<div class='alert alert-info'>Login Sukses</div>";
+                                                echo "<meta http-equiv='refresh' content='1;url=index.php''>";
+                                            }else{
+                                                echo "&nbsp";
+                                                echo "<div class='alert alert-danger'>Username atau Password tidak benar</div>";
+                                                echo "<meta http-equiv='refresh' content='1;url=login.php''>";
+                                            }
+                                            mysqli_close($koneksi);
                                         }
+                                        else {
+                                            echo "<script>alert('Captcha kosong atau captcha salah')</script>";
+                                            echo "<script>location='login.php';</script>"; 
+                                        } 
                                     }
                                     ?>
                                     <hr>
