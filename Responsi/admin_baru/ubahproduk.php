@@ -38,7 +38,7 @@
         $lokasifoto = $_FILES['foto']['tmp_name'];
         
         if (!empty($lokasifoto)) {
-            move_uploaded_file($lokasifoto, "../photo/".$namafoto);
+            move_uploaded_file($lokasifoto, "../photo/$namafoto");
 
             $koneksi->query("UPDATE produk SET 
             nama_produk = '$_POST[nama]', harga_produk = '$_POST[harga]', berat_produk = '$_POST[berat]', 
