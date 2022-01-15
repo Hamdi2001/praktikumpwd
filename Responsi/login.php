@@ -2,9 +2,37 @@
     session_start();
     require 'config.php';
 ?>
+
+<?php
+    // define variables and set to empty values
+    $emailErr = "";
+    $email ="";
+
+   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (empty($_POST["email"])) {
+        }else {
+            $email = test_input($_POST["email"]);
+            // check if e-mail address is well-formed
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $emailErr = "Email tidak sesuai format"; 
+            }
+        }
+   }
+
+    function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+   }
+?>
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        .error {color: #FF0000;}
+    </style>
+
     <title>LOGIN PELANGGAN</title>
     <link href="admin_baru/css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -55,6 +83,7 @@
 </head>
 <body>
     <div class="container">
+        
         <div class="row">
             <div class="col-md-4">
                 <div class="panel panel-default">
@@ -62,7 +91,7 @@
                         <h3 class="panel-title">Login Pelanggan</h3>
                     </div>
                     <div class="panel-body">
-                        <form method="post">
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" class="form-control" name="email">
@@ -95,6 +124,7 @@
             echo "<script>location='login.php';</script>";
         }
     }
+    
 ?>
 </body>
 </html>
